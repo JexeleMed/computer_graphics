@@ -1,0 +1,126 @@
+#!/usr/bin/env python3
+# Task 1 (grade 3.0): egg model built from points (GL_POINTS).
+# Usage: uv run lab3/zad1_egg_points.py [N]   (N = samples per parameter, default 20)
+
+import sys
+from math import cos, sin, pi
+
+from glfw.GLFW import *
+
+from OpenGL.GL import *
+from OpenGL.GLU import *
+
+N = int(sys.argv[1]) if len(sys.argv) > 1 else 20
+
+vertices = None
+
+
+def compute_egg(n):
+    tab = [[[0.0] * 3 for _ in range(n)] for _ in range(n)]
+    for i in range(n):
+        u = i / (n - 1)  # Last value must be exactly 1.0, hence n - 1.
+        radius = -90 * u ** 5 + 225 * u ** 4 - 270 * u ** 3 + 180 * u ** 2 - 45 * u
+        y = 160 * u ** 4 - 320 * u ** 3 + 160 * u ** 2 - 5
+        for j in range(n):
+            v = j / (n - 1)
+            tab[i][j][0] = radius * cos(pi * v)
+            tab[i][j][1] = y
+            tab[i][j][2] = radius * sin(pi * v)
+    return tab
+
+
+def startup(window):
+    global vertices
+    width, height = glfwGetFramebufferSize(window)
+    update_viewport(window, width, height)
+    glClearColor(0.0, 0.0, 0.0, 1.0)
+    glEnable(GL_DEPTH_TEST)
+    vertices = compute_egg(N)
+
+
+def shutdown():
+    pass
+
+
+def axes():
+    glBegin(GL_LINES)
+
+    glColor3f(1.0, 0.0, 0.0)
+    glVertex3f(-5.0, 0.0, 0.0)
+    glVertex3f(5.0, 0.0, 0.0)
+
+    glColor3f(0.0, 1.0, 0.0)
+    glVertex3f(0.0, -5.0, 0.0)
+    glVertex3f(0.0, 5.0, 0.0)
+
+    glColor3f(0.0, 0.0, 1.0)
+    glVertex3f(0.0, 0.0, -5.0)
+    glVertex3f(0.0, 0.0, 5.0)
+
+    glEnd()
+
+
+def draw_egg_points():
+    glColor3f(1.0, 1.0, 0.0)
+    glBegin(GL_POINTS)
+    for row in vertices:
+        for vertex in row:
+            glVertex3f(*vertex)
+    glEnd()
+
+
+def render(time):
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+    glLoadIdentity()
+
+    axes()
+    draw_egg_points()
+
+    glFlush()
+
+
+def update_viewport(window, width, height):
+    if height == 0:
+        height = 1
+    if width == 0:
+        width = 1
+    aspect_ratio = width / height
+
+    glMatrixMode(GL_PROJECTION)
+    glViewport(0, 0, width, height)
+    glLoadIdentity()
+
+    if width <= height:
+        glOrtho(-7.5, 7.5, -7.5 / aspect_ratio, 7.5 / aspect_ratio, 7.5, -7.5)
+    else:
+        glOrtho(-7.5 * aspect_ratio, 7.5 * aspect_ratio, -7.5, 7.5, 7.5, -7.5)
+
+    glMatrixMode(GL_MODELVIEW)
+    glLoadIdentity()
+
+
+def main():
+    if not glfwInit():
+        sys.exit(-1)
+
+    window = glfwCreateWindow(400, 400, __file__, None, None)
+    if not window:
+        glfwTerminate()
+        sys.exit(-1)
+
+    glfwMakeContextCurrent(window)
+    glfwSetFramebufferSizeCallback(window, update_viewport)
+    glfwSwapInterval(1)
+
+    startup(window)
+    while not glfwWindowShouldClose(window):
+        render(glfwGetTime())
+        glfwSwapBuffers(window)
+        glfwPollEvents()
+    shutdown()
+
+    glfwTerminate()
+
+
+if __name__ == '__main__':
+    main()
