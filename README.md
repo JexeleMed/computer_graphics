@@ -1,0 +1,1 @@
+This repository contains various programs, which I created during Computer Graphics course
