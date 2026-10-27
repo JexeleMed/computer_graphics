@@ -36,7 +36,7 @@ def draw_rectangle(x, y, a, b):
     glVertex2f(right, bottom)
     glVertex2f(right, top)
     glVertex2f(left, top)
-    glEnd()  # Both triangles share the diagonal (right,bottom)-(left,top), so together they form the rectangle.
+    glEnd()
 
 
 def render(time):

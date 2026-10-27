@@ -51,7 +51,7 @@ def draw_rectangle(x, y, a, b, d=0.0):  # Center (x, y), width a, height b; d = 
 def render(time):
     glClear(GL_COLOR_BUFFER_BIT)
 
-    random.seed(2137)  # Same seed every frame -> same "random" numbers -> picture doesn't flicker on redraw/resize.
+    random.seed(2137)
 
     draw_rectangle(-45.0, 45.0, 70.0, 50.0)
     draw_rectangle(45.0, 45.0, 70.0, 50.0, 0.1)

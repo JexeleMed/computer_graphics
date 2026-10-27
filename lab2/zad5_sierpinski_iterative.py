@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
-# Task 5 (grade 5.0): the Sierpinski carpet again, but ITERATIVE (no recursion) - the alternative allowed by the slides.
-# Idea ("domain of allowed coordinates"): split the carpet into a 3^n x 3^n grid of cells. Cell (i, j) is a hole
-# if, at some position, the base-3 digits of BOTH i and j are 1 (= middle third at that level of subdivision).
-# Usage: uv run lab2/zad5_sierpinski_iterative.py [level]   (default 4)
+# Usage: uv run lab2/zad5_sierpinski_iterative.py [level]
 
 import sys
 

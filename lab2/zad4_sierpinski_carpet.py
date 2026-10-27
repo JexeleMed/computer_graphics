@@ -50,7 +50,7 @@ def draw_carpet(x, y, a, b, level):
     for i in (-1, 0, 1):
         for j in (-1, 0, 1):
             if i == 0 and j == 0:
-                continue  # Central cell is the hole: skip it.
+                continue
             draw_carpet(x + i * third_a,
                         y + j * third_b,
                         third_a, third_b,
